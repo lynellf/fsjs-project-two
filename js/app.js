@@ -16,6 +16,9 @@ searchContainer = document.createElement('div'),
 searchBar = document.createElement('input'),
 searchSubmit = document.createElement('button'),
 
+// Error message when no results are available
+errorMsg = document.createElement('p'),
+
 // Split the array of students into groups of ten
 grouper = (array) => {
     let groups = [],
@@ -79,15 +82,17 @@ search = () => {
 
 // Intially, we want to hide all but the first ten students.
 // However, if the list of students is less than 10, we still need them displayed
+// This function shall display an error message if an empty array is passed
 filterStudents = (array) => {
-    const errorMsg = document.createElement('p');
     if (array[0].length >= 10) {
+        errorMsg.style.display = 'none';
         for (let i = 1; i < array.length; i++) {
             array[i].forEach(student => {
                 student.style.display = "none";
             });
         }
     } else if(array[0].length > 0) {
+        errorMsg.style.display = 'none';
         students.forEach(student => {
             student.style.display = 'none';
         });
@@ -98,12 +103,10 @@ filterStudents = (array) => {
             });
         }
     } else {
+        errorMsg.style.display = '';
         students.forEach(student => {
             student.style.display = 'none';
         });
-        errorMsg.className = 'error';
-        errorMsg.textContent = 'There\'s nothing here.';
-        page.insertBefore(errorMsg, paginationDiv);
     }
 };
 
@@ -133,6 +136,7 @@ paginationDiv.addEventListener('click', (event)=> {
         chosenArray = initialArrays.splice(arrayValue, 1);
 
     if (event.target.tagName === 'A') {
+        errorMsg.style.display = 'none';
         chosenArray.forEach(array => {
             for (let i = 0; i < array.length; i++) {
                 array[i].style.display = '';
@@ -157,6 +161,11 @@ paginationDiv.addEventListener('click', (event)=> {
 
 // Appending search elements to the DOM now...
 generateSearch();
+
+// Appending the error message to the dom. The display of this object shall be toggleable
+errorMsg.className = 'error';
+errorMsg.textContent = 'There\'s nothing here.';
+page.insertBefore(errorMsg, paginationDiv);
 
 // When the user clicks the search button, the matching students shall display
 searchSubmit.addEventListener('click', () => {
