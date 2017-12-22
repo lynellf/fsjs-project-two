@@ -1,3 +1,53 @@
+// Define the array of students
+const students = document.querySelectorAll('.student-item'),
+
+// Define the page element. We'll need to append the pagination element to it
+page = document.querySelector('.page'),
+
+// Defining the structure of the pagnation elements
+pageinationDiv = document.createElement('div'),
+pageinationList = document.createElement('ul'),
+
+
+// Split the array of students into groups of ten
+grouper = (array) => {
+    let groups = [],
+    group = [];
+    // We want to push 10 students into the group array
+    for (let i = 0; i < array.length; i++) {
+        group.push(students[i])
+        // When the group array length is equal to ten, we want to push it to the groups array and start over
+        if(group.length === 10) {
+            groups.push(group);
+            group = [];
+        }
+    }
+    // Whatever remains in the group array shall get pushed into the groups array and return the array
+    groups.push(group);
+    return groups;
+};
+// We're calling the grouper function to generate the arrays and store them within the studentGroups variable
+let studentGroups = grouper(students);
+
+// Intially, we want to hide all but the first ten students.
+// However, if the list of students is less than 10, we still need them displayed
+
+if(students.length > 10) {
+    for(i = 1; i < studentGroups.length; i++) {
+        studentGroups[i].forEach(student => {
+            student.style.display = "none";
+        });
+    }
+}
+
+// We're about to append the pagination element to the DOM, before this add the class name
+pageinationDiv.className = 'pagination';
+page.appendChild(pageinationDiv);
+
+// Append the unordered list to the DOM as well
+
+pageinationDiv.appendChild(pageinationList);
+
 // When the page loads, your program should hide all but the first 10 students in the list.
 
 // Look at the HTML in the example-meets.html on lines 119-137 -- this is an example of the markup you'll need to add dynamically to the index.html page to create pagination links.
